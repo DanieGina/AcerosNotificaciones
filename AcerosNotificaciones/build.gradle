@@ -11,4 +11,8 @@ repositories {
 
 dependencies {
     testImplementation     'junit:junit:4.13'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.3'
+
 }
