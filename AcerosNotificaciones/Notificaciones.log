@@ -1,0 +1,38 @@
+nov. 18, 2020 10:15:10 P. M. AcerosNotificaciones.ControlNotificaciones ProcesarNotificaciones
+INFO: Lectura de notificaciones inicializada
+nov. 18, 2020 10:16:30 P. M. AcerosNotificaciones.ControlNotificaciones ProcesarNotificaciones
+INFO: Lectura de notificaciones inicializada
+nov. 18, 2020 10:19:06 P. M. AcerosNotificaciones.ControlNotificaciones ProcesarNotificaciones
+INFO: Lectura de notificaciones inicializada
+nov. 18, 2020 10:19:06 P. M. AcerosNotificaciones.ControlNotificaciones ProcesarNotificaciones
+SEVERE: java.net.UnknownHostException: ww.acerosviajes.com.mx
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:567)
+	at java.base/java.net.Socket.connect(Socket.java:648)
+	at java.base/java.net.Socket.connect(Socket.java:597)
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:182)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:474)
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:569)
+	at java.base/sun.net.www.http.HttpClient.<init>(HttpClient.java:242)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:341)
+	at java.base/sun.net.www.http.HttpClient.New(HttpClient.java:362)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1261)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1194)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1082)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1016)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1600)
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1528)
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:527)
+	at AcerosNotificaciones.RestClient.GetObjectRest_GetMethod(RestClient.java:30)
+	at AcerosNotificaciones.ControlNotificaciones.ObtenerNotificaciones(ControlNotificaciones.java:63)
+	at AcerosNotificaciones.ControlNotificaciones.ProcesarNotificaciones(ControlNotificaciones.java:42)
+	at AcerosNotificaciones.Main.main(Main.java:24)
+
+nov. 18, 2020 10:19:33 P. M. AcerosNotificaciones.ControlNotificaciones ProcesarNotificaciones
+INFO: Lectura de notificaciones inicializada
+nov. 18, 2020 10:19:35 P. M. AcerosNotificaciones.ControlNotificaciones ProcesarNotificaciones
+SEVERE: java.lang.RuntimeException: Failed : HTTP error code : 403
+	at AcerosNotificaciones.RestClient.GetObjectRest_GetMethod(RestClient.java:32)
+	at AcerosNotificaciones.ControlNotificaciones.ObtenerNotificaciones(ControlNotificaciones.java:63)
+	at AcerosNotificaciones.ControlNotificaciones.ProcesarNotificaciones(ControlNotificaciones.java:42)
+	at AcerosNotificaciones.Main.main(Main.java:24)
+

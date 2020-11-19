@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 /**
@@ -18,33 +19,28 @@ import java.net.URL;
  */
 public class RestClient {
 
-    public String GetObjectRest_GetMethod(String clientUrl) {
+    public String GetObjectRest_GetMethod(String clientUrl) throws MalformedURLException, ProtocolException, IOException {
         String object = "";
-        try {
 
-            URL url = new URL(clientUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
+        URL url = new URL(clientUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
 
-            if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (conn.getInputStream())));
-
-            String output;
-            while ((output = br.readLine()) != null) {
-                object += output;
-            }
-
-            conn.disconnect();
-
-        } catch (MalformedURLException e) {
-        } catch (IOException e) {
+        if (conn.getResponseCode() != 200) {
+            throw new RuntimeException("Failed : HTTP error code : "
+                    + conn.getResponseCode());
         }
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                (conn.getInputStream())));
+
+        String output;
+        while ((output = br.readLine()) != null) {
+            object += output;
+        }
+
+        conn.disconnect();
 
         return object;
     }
