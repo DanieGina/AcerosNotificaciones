@@ -18,16 +18,11 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws JsonProcessingException {
-        RestClient res = new RestClient();
-        
-        String notificacionesJson =res.GetObjectRest_GetMethod("http://www.acerosviajes.com.mx/api/Notify/GetNotifyConfiguration?username=admin&password=Aceros123*");
-        
-        ObjectMapper objectMapper = new ObjectMapper();
-        
-        Notificaciones not = objectMapper.readValue(notificacionesJson, Notificaciones.class);
-        
-        System.out.println(not);
+    public static void main(String[] args) {
+
+        ControlNotificaciones ctr = new ControlNotificaciones();
+        ctr.ProcesarNotificaciones();
+
     }
-    
+
 }
