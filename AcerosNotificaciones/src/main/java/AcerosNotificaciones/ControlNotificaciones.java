@@ -7,6 +7,7 @@ package AcerosNotificaciones;
 
 import AcerosNotificaciones.Modelos.Notificacion;
 import AcerosNotificaciones.Modelos.Notificaciones;
+import AcerosNotificaciones.Modelos.ResponseNotificacion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.function.Consumer;
 
@@ -21,7 +22,7 @@ public class ControlNotificaciones {
             Notificaciones lstNotificaciones = ObtenerNotificaciones();
 
             lstNotificaciones.NotifyConfigurationTableCollection.forEach((Notificacion notificacion) -> {
-                System.out.println(notificacion.UserGuid);
+                ResponseNotificacion resultado = ProcesarNotificacion(notificacion);
             });
         } catch (Exception e) {
 
@@ -43,4 +44,11 @@ public class ControlNotificaciones {
         }
         return null;
     }
+
+    private ResponseNotificacion ProcesarNotificacion(Notificacion notificacion) {
+        ResponseNotificacion resultado = new ResponseNotificacion();
+
+        return resultado;
+    }
+
 }
