@@ -10,11 +10,15 @@ import AcerosNotificaciones.Modelos.Notificaciones;
 import AcerosNotificaciones.Modelos.ResponseNotificacion;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ProtocolException;
 import java.util.Date;
+import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -31,7 +35,7 @@ public class ControlNotificaciones {
 
     public void ProcesarNotificaciones() {
         try {
-            Handler fileHandler = new FileHandler("./Notificaciones.log", true);
+            Handler fileHandler = new FileHandler("./log/Notificaciones.log", true);
             SimpleFormatter simpleFormatter = new SimpleFormatter();
             fileHandler.setFormatter(simpleFormatter);
             LOG_RAIZ.addHandler(fileHandler);
@@ -40,15 +44,19 @@ public class ControlNotificaciones {
             LOG_RAIZ.log(Level.INFO, "Lectura de notificaciones inicializada");
 
             Notificaciones lstNotificaciones = ObtenerNotificaciones();
-            
-            if (lstNotificaciones == null){
-               LOG_RAIZ.log(Level.WARNING, "No se obtuvieron notificaciones valide el log"); 
+
+            if (lstNotificaciones == null) {
+                LOG_RAIZ.log(Level.WARNING, "No se obtuvieron notificaciones valide el log");
             }
-            
-            
+
             lstNotificaciones.NotifyConfigurationTableCollection.forEach((var notificacion) -> {
                 if (ValidarEnvioNotificacion(notificacion)) {
                     ResponseNotificacion resultado = ProcesarNotificacion(notificacion);
+                    if (resultado.Error) {
+                        LOG_RAIZ.log(Level.WARNING, "Error de servicio: notifyconfigurationid={0} {1}", new Object[]{Integer.toString(notificacion.NotifyConfigurationId), resultado.ErrorDsc});
+                    } else {
+                        ActualizarNotificacion(notificacion.NotifyConfigurationId);
+                    }
                 }
             });
         } catch (Exception e) {
@@ -60,7 +68,7 @@ public class ControlNotificaciones {
         RestClient res = new RestClient();
 
         try {
-            String notificacionesJson = res.GetObjectRest_GetMethod("http://www.acerosviajes.com.mx/api/Notify/GetNotifyConfiguration?username=admin&password=Aceros12*");
+            String notificacionesJson = res.GetObjectRest_GetMethod(ObtenerUrlNotificaciones());
 
             ObjectMapper objectMapper = new ObjectMapper();
 
@@ -81,7 +89,7 @@ public class ControlNotificaciones {
         RestClient res = new RestClient();
 
         try {
-            String respuestaJson = res.GetObjectRest_GetMethod("http://www.acerosviajes.com.mx/api/notify/sendnotification?username=admin&password=Aceros123*&notifyconfigurationid=" + Integer.toString(notifyconfigurationid));
+            String respuestaJson = res.GetObjectRest_GetMethod(ObtenerUrlEnviarNotificacion(notifyconfigurationid));
 
             ObjectMapper objectMapper = new ObjectMapper();
 
@@ -91,6 +99,23 @@ public class ControlNotificaciones {
             LOG_RAIZ.log(Level.SEVERE, getStackTrace(e));
         }
         return null;
+    }
+
+    private void ActualizarNotificacion(int notifyconfigurationid) {
+        RestClient res = new RestClient();
+        try {
+            String respuestaJson = res.GetObjectRest_GetMethod(ObtenerUrlActualizarNotificacion(notifyconfigurationid));
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            var resultado = objectMapper.readValue(respuestaJson, ResponseNotificacion.class);
+            if (resultado.Error) {
+                LOG_RAIZ.log(Level.WARNING, "Error de servicio: notifyconfigurationid={0} {1}", new Object[]{Integer.toString(notifyconfigurationid), resultado.ErrorDsc});
+            }
+
+        } catch (IOException e) {
+            LOG_RAIZ.log(Level.SEVERE, getStackTrace(e));
+        }
     }
 
     private boolean ValidarEnvioNotificacion(Notificacion notificacion) {
@@ -108,11 +133,39 @@ public class ControlNotificaciones {
 
     }
 
+    private String ObtenerUrlNotificaciones() throws IOException {
+
+        return getValueProperties("Url_Api") + "api/notify/GetNotifyConfiguration?username=" + getValueProperties("Usuario_Api") + "&password=" + getValueProperties("Password_Api");
+
+    }
+
+    private String ObtenerUrlEnviarNotificacion(int notifyconfigurationid) throws IOException {
+
+        return getValueProperties("Url_Api") + "api/notify/sendnotification?username=" + getValueProperties("Usuario_Api") + "&password=" + getValueProperties("Password_Api") + "&notifyconfigurationid=" + Integer.toString(notifyconfigurationid);
+
+    }
+
+    private String ObtenerUrlActualizarNotificacion(int notifyconfigurationid) throws IOException {
+
+        return getValueProperties("Url_Api") + "api/notify/updatenotification?username=" + getValueProperties("Usuario_Api") + "&password=" + getValueProperties("Password_Api") + "&notifyconfigurationid=" + Integer.toString(notifyconfigurationid);
+
+    }
+
     private String getStackTrace(Exception e) {
         StringWriter sWriter = new StringWriter();
         PrintWriter pWriter = new PrintWriter(sWriter);
         e.printStackTrace(pWriter);
         return sWriter.toString();
+    }
+
+    private String getValueProperties(String property) throws FileNotFoundException, IOException {
+
+        Properties config = new Properties();
+        InputStream configInput;
+        configInput = new FileInputStream("Notificaciones.properties");
+        config.load(configInput);
+        return config.getProperty(property);
+
     }
 
 }
