@@ -1,3 +1,4 @@
+
 ## Taller de productividad basada en herramientas tecnológicas
 ## Descripción
 Actualmente la empresa Aceros tiene un sistema de administración de viajes en el cual se registran los datos de viajes realizados, los gatos y consumos que el viaje genera. Es necesario generar notificaciones automáticas que ejecute los servicios rest que la empresa proveerá.
@@ -32,3 +33,4 @@ Como es un .jar el software no se instala, solo se ejecuta en el ambiente de JAV
 *	el código se entregará al cliente por lo cual no podrán usar el repositorio personal no se administrará sobre git
 ## Uso
 El sistema funcional se entregará al cliente y también el código no será expuesto por git por la información confidencial, el versionamiento y administración se llevará por la empresa.
+
